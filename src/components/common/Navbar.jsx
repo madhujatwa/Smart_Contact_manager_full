@@ -1,3 +1,4 @@
+
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useTheme } from "../../context/ThemeContext";
@@ -9,7 +10,10 @@ import {
   FaTimes,
 } from "react-icons/fa";
 
-export default function Navbar() {
+export default function Navbar({
+  sidebarOpen,
+  setSidebarOpen,
+}) {
 
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -17,42 +21,56 @@ export default function Navbar() {
 
   return (
 
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg shadow">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-lg shadow">
 
-      <div className="max-w-7xl mx-auto px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <div className="flex items-center justify-between h-20">
 
-          {/* Logo */}
+          {/* Left */}
 
-          <Link
-            to="/"
-            className="flex items-center gap-3"
-          >
+          <div className="flex items-center gap-3">
 
-            <div className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold text-xl shadow-lg">
+            {setSidebarOpen && (
+              <button
+                onClick={() => setSidebarOpen(!sidebarOpen)}
+                className="lg:hidden text-2xl text-slate-700 dark:text-white"
+              >
+                <FaBars />
+              </button>
+            )}
 
-              SCM
+            <Link
+              to="/"
+              className="flex items-center gap-3"
+            >
 
-            </div>
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold">
 
-            <div>
+                SCM
 
-              <h2 className="font-bold text-2xl text-slate-900 dark:text-white">
-                Smart Contact
-              </h2>
+              </div>
 
-              <p className="text-xs text-gray-500 dark:text-gray-300">
-                Manager
-              </p>
+              <div>
 
-            </div>
+                <h2 className="font-bold text-lg sm:text-2xl text-slate-900 dark:text-white">
+                  Smart Contact
+                </h2>
 
-          </Link>
+                <p className="text-xs text-gray-500 dark:text-gray-300">
+                  Manager
+                </p>
 
+              </div>
+
+            </Link>
+
+          </div>
+
+          
           {/* Desktop Menu */}
 
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-5 lg:gap-8">
 
             <Link
               to="/"
@@ -102,16 +120,17 @@ export default function Navbar() {
 
         </div>
 
+       
         {/* Mobile Menu */}
 
         {menuOpen && (
 
-          <div className="md:hidden flex flex-col gap-5 py-6 bg-white dark:bg-slate-900 rounded-xl mt-3 px-4 shadow-lg">
+          <div className="md:hidden mt-3 bg-white dark:bg-slate-900 rounded-2xl shadow-lg px-5 py-5 space-y-4">
 
             <Link
               to="/"
               onClick={() => setMenuOpen(false)}
-              className="dark:text-white"
+              className="block font-medium hover:text-blue-600 dark:text-white"
             >
               Home
             </Link>
@@ -119,7 +138,7 @@ export default function Navbar() {
             <Link
               to="/contact"
               onClick={() => setMenuOpen(false)}
-              className="dark:text-white"
+              className="block font-medium hover:text-blue-600 dark:text-white"
             >
               Contact
             </Link>
@@ -127,7 +146,7 @@ export default function Navbar() {
             <Link
               to="/login"
               onClick={() => setMenuOpen(false)}
-              className="dark:text-white"
+              className="block font-medium hover:text-blue-600 dark:text-white"
             >
               Login
             </Link>
@@ -135,19 +154,17 @@ export default function Navbar() {
             <Link
               to="/register"
               onClick={() => setMenuOpen(false)}
-              className="dark:text-white"
+              className="block bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-center py-3 rounded-xl hover:scale-105 transition"
             >
               Signup
             </Link>
 
             <button
               onClick={toggleTheme}
-              className="flex items-center gap-2 dark:text-white"
+              className="flex items-center gap-2 text-lg dark:text-white"
             >
               {darkMode ? <FaSun /> : <FaMoon />}
-
               {darkMode ? "Light Mode" : "Dark Mode"}
-
             </button>
 
           </div>
@@ -161,3 +178,8 @@ export default function Navbar() {
   );
 
 }
+
+
+
+
+
