@@ -21,6 +21,7 @@ import EditContact from "./pages/user/EditContact";
 import Favorites from "./pages/user/Favorites";
 import Profile from "./pages/user/Profile";
 import NotFound from "./pages/user/NotFound";
+import OAuthSuccess from "./pages/auth/OAuthSuccess";
 
 export default function App() {
 
@@ -103,6 +104,10 @@ export default function App() {
         path="*"
         element={<NotFound />}
       />
+      <Route
+    path="/oauth-success"
+    element={<OAuthSuccess />}
+/>
 
     </Routes>
 

@@ -88,7 +88,7 @@ const contactData = {
 
   imageUrl: "",
 
-  userId: user.id,
+  userId: user.userId,
 
   linkedInLink: "",
 

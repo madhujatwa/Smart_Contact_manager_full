@@ -43,7 +43,7 @@ export default function ViewContacts() {
 
       const user = JSON.parse(localStorage.getItem("user"));
 
-     const data = await getAllContacts(user.email);
+      const data = await getAllContacts(user.email);
 
       setContacts(data);
 
@@ -234,6 +234,13 @@ export default function ViewContacts() {
 
                   <span>{contact.phoneNumber}</span>
 
+                </div>
+                <div className="flex items-start gap-3">
+                  <span className="text-red-500 font-bold">📍</span>
+
+                  <span className="text-sm text-slate-600 dark:text-slate-300">
+                    {contact.address || "No Address"}
+                  </span>
                 </div>
 
               </div>

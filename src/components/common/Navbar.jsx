@@ -2,6 +2,7 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useTheme } from "../../context/ThemeContext";
+import { useEffect } from "react";
 
 import {
   FaMoon,
@@ -18,6 +19,29 @@ export default function Navbar({
   const [menuOpen, setMenuOpen] = useState(false);
 
   const { darkMode, toggleTheme } = useTheme();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+ useEffect(() => {
+  const checkLogin = () => {
+    setIsLoggedIn(!!localStorage.getItem("token"));
+  };
+
+  checkLogin();
+
+  window.addEventListener("storage", checkLogin);
+
+  return () => window.removeEventListener("storage", checkLogin);
+}, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    localStorage.removeItem("email");
+
+    setIsLoggedIn(false);
+
+    window.location.href = "/";
+  };
 
   return (
 
@@ -67,47 +91,42 @@ export default function Navbar({
 
           </div>
 
-          
+
           {/* Desktop Menu */}
 
-          <div className="hidden md:flex items-center gap-5 lg:gap-8">
+          {!isLoggedIn ? (
+            <>
+              <Link
+                to="/login"
+                className="font-medium hover:text-blue-600 transition dark:text-white"
+              >
+                Login
+              </Link>
 
-            <Link
-              to="/"
-              className="font-medium hover:text-blue-600 transition dark:text-white"
-            >
-              Home
-            </Link>
+              <Link
+                to="/register"
+                className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-5 py-2 rounded-xl"
+              >
+                Signup
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link
+                to="/dashboard"
+                className="font-medium hover:text-blue-600 transition dark:text-white"
+              >
+                Dashboard
+              </Link>
 
-            <Link
-              to="/contact"
-              className="font-medium hover:text-blue-600 transition dark:text-white"
-            >
-              Contact
-            </Link>
-
-            <Link
-              to="/login"
-              className="font-medium hover:text-blue-600 transition dark:text-white"
-            >
-              Login
-            </Link>
-
-            <Link
-              to="/register"
-              className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-5 py-2 rounded-xl hover:scale-105 transition"
-            >
-              Signup
-            </Link>
-
-            <button
-              onClick={toggleTheme}
-              className="text-2xl hover:scale-110 transition dark:text-white"
-            >
-              {darkMode ? <FaSun /> : <FaMoon />}
-            </button>
-
-          </div>
+              <button
+                onClick={handleLogout}
+                className="bg-red-500 text-white px-5 py-2 rounded-xl"
+              >
+                Logout
+              </button>
+            </>
+          )}
 
           {/* Mobile Menu Button */}
 
@@ -120,7 +139,7 @@ export default function Navbar({
 
         </div>
 
-       
+
         {/* Mobile Menu */}
 
         {menuOpen && (
@@ -143,21 +162,46 @@ export default function Navbar({
               Contact
             </Link>
 
-            <Link
-              to="/login"
-              onClick={() => setMenuOpen(false)}
-              className="block font-medium hover:text-blue-600 dark:text-white"
-            >
-              Login
-            </Link>
+            {!isLoggedIn ? (
 
-            <Link
-              to="/register"
-              onClick={() => setMenuOpen(false)}
-              className="block bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-center py-3 rounded-xl hover:scale-105 transition"
-            >
-              Signup
-            </Link>
+              <>
+                <Link
+                  to="/login"
+                  onClick={() => setMenuOpen(false)}
+                  className="block font-medium hover:text-blue-600 dark:text-white"
+                >
+                  Login
+                </Link>
+
+                <Link
+                  to="/register"
+                  onClick={() => setMenuOpen(false)}
+                  className="block bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-center py-3 rounded-xl"
+                >
+                  Signup
+                </Link>
+              </>
+
+            ) : (
+
+              <>
+                <Link
+                  to="/dashboard"
+                  onClick={() => setMenuOpen(false)}
+                  className="block font-medium hover:text-blue-600 dark:text-white"
+                >
+                  Dashboard
+                </Link>
+
+                <button
+                  onClick={handleLogout}
+                  className="w-full bg-red-500 text-white py-3 rounded-xl"
+                >
+                  Logout
+                </button>
+              </>
+
+            )}
 
             <button
               onClick={toggleTheme}

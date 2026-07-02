@@ -12,7 +12,8 @@ import {
 } from "react-icons/fa";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
-import axios from "axios";
+import { loginUser } from "../../services/authService";
+import api from "../../services/api";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -36,57 +37,61 @@ export default function Login() {
   };
 
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
 
-  if (!formData.email || !formData.password) {
-    toast.error("All fields are required");
-    return;
-  }
+    e.preventDefault();
 
-  try {
-
-    setLoading(true);
-
-    const response = await axios.post(
-      "http://localhost:8080/api/users/login",
-      formData
-    );
-
-    const data = response.data;
-
-    // Save user object
-    localStorage.setItem("user", JSON.stringify(data));
-
-    // Save email separately (Dashboard ke liye)
-    localStorage.setItem("email", data.email);
-
-    // Future JWT support
-    if (data.token) {
-      localStorage.setItem("token", data.token);
+    if (!formData.email || !formData.password) {
+      toast.error("All fields are required");
+      return;
     }
 
-    toast.success("Login Successful");
+    try {
 
-    navigate("/dashboard");
+      setLoading(true);
 
-  } catch (error) {
+      // Login API
+      const data = await loginUser(formData);
 
-    console.log(error);
+      console.log("Login Response:", data);
 
-    toast.error(
-      error?.response?.data?.message ||
-      "Invalid Email or Password"
-    );
+      // Save JWT Token
+      localStorage.setItem("token", data.token);
 
-  } finally {
+      // Save Email
+      localStorage.setItem("email", data.email);
 
-    setLoading(false);
+      // Fetch Complete User Profile
+      const profileResponse = await api.get(
+        `/api/users/profile/${data.email}`
+      );
 
-  }
-};
+      // Save Complete User
+      localStorage.setItem(
+        "user",
+        JSON.stringify(profileResponse.data)
+      );
 
+      toast.success(data.message || "Login Successful");
 
+      navigate("/dashboard");
+
+    } catch (error) {
+
+      console.error(error);
+
+      toast.error(
+        error?.response?.data?.message ||
+        "Invalid Email or Password"
+      );
+
+    } finally {
+
+      setLoading(false);
+
+    }
+
+  };
 
   return (
     <div className="min-h-screen flex justify-center items-center bg-slate-100">
@@ -215,6 +220,44 @@ const handleSubmit = async (e) => {
 
         </form>
 
+        {/* Divider */}
+
+        <div className="flex items-center my-6">
+
+          <div className="flex-1 border-t border-gray-300"></div>
+
+          <span className="px-4 text-sm text-gray-500 font-medium">
+            OR CONTINUE WITH
+          </span>
+
+          <div className="flex-1 border-t border-gray-300"></div>
+
+        </div>
+
+        {/* Google Button */}
+
+        <button
+          type="button"
+          onClick={() =>
+            window.location.href =
+            `${import.meta.env.VITE_API_URL}/oauth2/authorization/google`
+          }
+          className="w-full flex items-center justify-center gap-3 bg-white border border-gray-300 rounded-xl py-4 font-semibold text-gray-700 shadow-sm hover:shadow-lg hover:-translate-y-1 hover:border-blue-500 transition-all duration-300"
+        >
+
+          {/* Google Logo */}
+
+          <img
+            src="https://www.svgrepo.com/show/475656/google-color.svg"
+            alt="Google"
+            className="w-6 h-6"
+          />
+
+          <span>
+           Login with Google
+          </span>
+
+        </button>
         <div className="mt-6 text-center">
 
           <p className="text-slate-500">

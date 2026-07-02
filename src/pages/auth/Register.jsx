@@ -13,8 +13,7 @@ import {
 } from "react-icons/fa";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
-import axios from "axios";
-
+import { registerUser } from "../../services/authService";
 export default function Register() {
 
   const navigate = useNavigate();
@@ -67,8 +66,8 @@ export default function Register() {
 
       setLoading(true);
 
-      const response = await axios.post(
-        "http://localhost:8080/api/users/signup",
+      const response = await registerUser(
+
         {
           name: formData.name,
           email: formData.email,
@@ -271,7 +270,44 @@ export default function Register() {
           </button>
 
         </form>
+        {/* Divider */}
 
+        <div className="flex items-center my-6">
+
+          <div className="flex-1 border-t border-gray-300"></div>
+
+          <span className="px-4 text-sm text-gray-500 font-medium">
+            OR CONTINUE WITH
+          </span>
+
+          <div className="flex-1 border-t border-gray-300"></div>
+
+        </div>
+
+        {/* Google Button */}
+
+        <button
+          type="button"
+          onClick={() =>
+            window.location.href =
+            `${import.meta.env.VITE_API_URL}/oauth2/authorization/google`
+          }
+          className="w-full flex items-center justify-center gap-3 bg-white border border-gray-300 rounded-xl py-4 font-semibold text-gray-700 shadow-sm hover:shadow-lg hover:-translate-y-1 hover:border-blue-500 transition-all duration-300"
+        >
+
+          {/* Google Logo */}
+
+          <img
+            src="https://www.svgrepo.com/show/475656/google-color.svg"
+            alt="Google"
+            className="w-6 h-6"
+          />
+
+          <span>
+            Singup with Google
+          </span>
+
+        </button>
         <div className="mt-6 text-center">
 
           <p className="text-slate-500">

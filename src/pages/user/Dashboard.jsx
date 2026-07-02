@@ -2,8 +2,7 @@
 // src/pages/user/Dashboard.jsx
 
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import {
+import { Link, useNavigate } from "react-router-dom";import {
   FaAddressBook,
   FaHeart,
   FaUserPlus,
@@ -17,30 +16,50 @@ export default function Dashboard() {
   const [contacts, setContacts] = useState([]);
   const [favorites, setFavorites] = useState([]);
 
-const email = localStorage.getItem("email");
-  useEffect(() => {
+  const navigate = useNavigate();
+
+const user = JSON.parse(localStorage.getItem("user"));
+
+const email = user?.email;
+
+useEffect(() => {
+
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    navigate("/login");
+    return;
+  }
+
+  if (email) {
     loadContacts();
-  }, []);
+  }
 
-  const loadContacts = async () => {
+}, [email]);
 
-    try {
+const loadContacts = async () => {
 
-     const response = await api.get(
-  `/api/contacts/user/${email}`
-);
-      setContacts(response.data);
+  try {
 
-      const fav = response.data.filter(
-        (c) => c.favorite === true
-      );
+    const response = await api.get(
+      `/api/contacts/user/${email}`
+    );
 
-      setFavorites(fav);
+    setContacts(response.data);
 
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    const fav = response.data.filter(
+      (contact) => contact.favorite
+    );
+
+    setFavorites(fav);
+
+  } catch (error) {
+
+    console.error(error);
+
+  }
+
+};
 
   return (
 

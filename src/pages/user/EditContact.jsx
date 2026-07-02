@@ -10,6 +10,7 @@ import {
   FaGlobe,
   FaHeart,
   FaSave,
+  FaMapMarkerAlt,
 } from "react-icons/fa";
 
 import {
@@ -32,11 +33,13 @@ export default function EditContact() {
     name: "",
     email: "",
     phone: "",
+    address: "",
     website: "",
     description: "",
     category: "Friend",
     favorite: false,
     image: null,
+    imageUrl: "",
   });
 
   useEffect(() => {
@@ -53,11 +56,13 @@ export default function EditContact() {
         name: data.name || "",
         email: data.email || "",
         phone: data.phoneNumber || "",
+        address: data.address || "",   // 
         website: data.websiteLink || "",
         description: data.description || "",
         category: data.category || "Friend",
         favorite: data.favorite || false,
         image: null,
+        imageUrl: data.imageUrl || "", 
       });
 
       if (data.imageUrl) {
@@ -114,10 +119,12 @@ export default function EditContact() {
         name: formData.name,
         email: formData.email,
         phoneNumber: formData.phone,
+        address: formData.address,
         websiteLink: formData.website,
         description: formData.description,
         category: formData.category,
         favorite: formData.favorite,
+        imageUrl: formData.imageUrl,
         userId: user.userId,
       };
 
@@ -285,7 +292,10 @@ export default function EditContact() {
 
             </div>
 
+
             <div className="grid md:grid-cols-2 gap-6">
+
+              {/* Phone */}
 
               <div>
 
@@ -308,6 +318,33 @@ export default function EditContact() {
                 </div>
 
               </div>
+
+              {/* Address */}
+
+              <div>
+
+                <label className="block mb-2 font-medium">
+                  Address
+                </label>
+
+                <div className="flex items-center bg-slate-100 rounded-xl px-4">
+
+                  <FaMapMarkerAlt className="text-slate-400" />
+
+                  <input
+                    type="text"
+                    name="address"
+                    value={formData.address}
+                    onChange={handleChange}
+                    placeholder="Enter Address"
+                    className="w-full p-4 bg-transparent outline-none"
+                  />
+
+                </div>
+
+              </div>
+
+              {/* Website */}
 
               <div>
 
@@ -334,7 +371,6 @@ export default function EditContact() {
             </div>
 
             <div>
-
               <label className="block mb-2 font-medium">
                 Description
               </label>
@@ -381,11 +417,10 @@ export default function EditContact() {
                     favorite: !prev.favorite,
                   }))
                 }
-                className={`rounded-xl p-4 flex items-center justify-center gap-2 mt-8 ${
-                  formData.favorite
-                    ? "bg-red-500 text-white"
-                    : "bg-slate-100"
-                }`}
+                className={`rounded-xl p-4 flex items-center justify-center gap-2 mt-8 ${formData.favorite
+                  ? "bg-red-500 text-white"
+                  : "bg-slate-100"
+                  }`}
               >
 
                 <FaHeart />

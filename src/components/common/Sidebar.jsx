@@ -20,6 +20,14 @@ export default function Sidebar({
   const user =
     JSON.parse(localStorage.getItem("user")) || {};
 
+  const initials = user?.name
+    ? user.name
+      .split(" ")
+      .map((word) => word[0])
+      .join("")
+      .toUpperCase()
+    : "U";
+
   const logout = () => {
     localStorage.clear();
     setSidebarOpen(false);
@@ -58,10 +66,23 @@ lg:block
       >      {/* Profile */}
 
         <div className="flex flex-col items-center py-6 border-b">
-          <img
-            src="https://i.pravatar.cc/150?img=12"
-            alt="profile"
-            className="w-24 h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 rounded-full object-cover shadow-lg" />
+          {user?.profilePic ? (
+
+            <img
+              src={user.profilePic}
+              alt="profile"
+              className="w-24 h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 rounded-full object-cover shadow-lg"
+            />
+
+          ) : (
+
+            <div
+              className="w-24 h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 flex items-center justify-center text-white text-4xl font-bold shadow-lg"
+            >
+              {initials}
+            </div>
+
+          )}
 
           <h2 className="mt-4 text-xl font-bold">
             {user.name || "User"}
