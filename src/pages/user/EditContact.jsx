@@ -107,46 +107,45 @@ export default function EditContact() {
 
   };
 
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
 
-    e.preventDefault();
+  e.preventDefault();
 
-    try {
+  try {
 
-      const user = JSON.parse(localStorage.getItem("user"));
+    const contactData = {
+      name: formData.name,
+      email: formData.email,
+      phoneNumber: formData.phone,
+      address: formData.address,
+      websiteLink: formData.website,
+      description: formData.description,
+      category: formData.category,
+      favorite: formData.favorite,
+      imageUrl: formData.imageUrl,
+      linkedInLink: "",
+      socialLinks: []
+    };
 
-      const contactData = {
-        name: formData.name,
-        email: formData.email,
-        phoneNumber: formData.phone,
-        address: formData.address,
-        websiteLink: formData.website,
-        description: formData.description,
-        category: formData.category,
-        favorite: formData.favorite,
-        imageUrl: formData.imageUrl,
-        userId: user.userId,
-      };
+    await updateContact(id, contactData);
 
-      await updateContact(id, contactData);
-
-      if (formData.image) {
-        await uploadImage(id, formData.image);
-      }
-
-      alert("Contact Updated Successfully");
-
-      navigate("/dashboard/view");
-
-    } catch (error) {
-
-      console.log(error);
-
-      alert("Unable to Update Contact");
-
+    if (formData.image) {
+      await uploadImage(id, formData.image);
     }
 
-  };
+    alert("Contact Updated Successfully");
+
+    navigate("/dashboard/view");
+
+  } catch (error) {
+
+    console.log(error);
+
+    alert("Unable To Update Contact");
+
+  }
+
+};
 
   if (loading) {
 

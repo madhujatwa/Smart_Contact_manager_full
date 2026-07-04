@@ -37,31 +37,29 @@ export default function ViewContacts() {
 
   }, []);
 
-  const loadContacts = async () => {
+const loadContacts = async () => {
 
-    try {
+  try {
 
-      const user = JSON.parse(localStorage.getItem("user"));
+    const data = await getAllContacts();
 
-      const data = await getAllContacts(user.email);
+    setContacts(data);
 
-      setContacts(data);
+    setFilteredContacts(data);
 
-      setFilteredContacts(data);
+  } catch (error) {
 
-    } catch (error) {
+    console.log(error);
 
-      console.log(error);
+    alert("Unable To Load Contacts");
 
-      alert("Unable To Load Contacts");
+  } finally {
 
-    } finally {
+    setLoading(false);
 
-      setLoading(false);
+  }
 
-    }
-
-  };
+};
 
   useEffect(() => {
 

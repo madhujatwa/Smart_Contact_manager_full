@@ -64,57 +64,53 @@ export default function AddContact() {
 
   const handleSubmit = async (e) => {
 
-    e.preventDefault();
+  e.preventDefault();
 
-    try {
+  try {
 
-  const user = JSON.parse(localStorage.getItem("user"));
+    const contactData = {
 
-const contactData = {
+      name: formData.name,
 
-  name: formData.name,
+      email: formData.email,
 
-  email: formData.email,
+      phoneNumber: formData.phone,
 
-  phoneNumber: formData.phone,
+      address: formData.address,
 
-  address: formData.address,
+      websiteLink: formData.website,
 
-  websiteLink: formData.website,
+      description: formData.description,
 
-  description: formData.description,
+      favorite: formData.favorite,
 
-  favorite: formData.favorite,
+      imageUrl: "",
 
-  imageUrl: "",
+      linkedInLink: "",
 
-  userId: user.userId,
+      
 
-  linkedInLink: "",
+    };
 
-  socialLinks: []
+    const savedContact = await addContact(contactData);
 
-};
-
-      const savedContact = await addContact(contactData);
-
-      if (formData.image) {
-        await uploadImage(savedContact.id, formData.image);
-      }
-
-     toast.success("Contact Added Successfully");
-
-      navigate("/dashboard/view");
-
-    } catch (error) {
-
-      console.log(error);
-
-      alert("Unable To Save Contact");
-
+    if (formData.image) {
+      await uploadImage(savedContact.id, formData.image);
     }
 
-  };
+    toast.success("Contact Added Successfully");
+
+    navigate("/dashboard/view");
+
+  } catch (error) {
+
+    console.log(error);
+
+    toast.error("Unable To Save Contact");
+
+  }
+
+};
 
   return (
 

@@ -2,9 +2,9 @@ import api from "./api";
 
 // ================= GET ALL CONTACTS =================
 
-export const getAllContacts = async (email) => {
+export const getAllContacts = async () => {
 
-  const response = await api.get(`/api/contacts/user/${email}`);
+  const response = await api.get("/api/contacts");
 
   return response.data;
 
@@ -24,7 +24,7 @@ export const getContactById = async (id) => {
 
 export const addContact = async (contact) => {
 
-  const response = await api.post(`/api/contacts`, contact);
+  const response = await api.post("/api/contacts", contact);
 
   return response.data;
 

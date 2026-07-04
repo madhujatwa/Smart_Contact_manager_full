@@ -41,9 +41,7 @@ const loadContacts = async () => {
 
   try {
 
-    const response = await api.get(
-      `/api/contacts/user/${email}`
-    );
+   const response = await api.get("/api/contacts");
 
     setContacts(response.data);
 
